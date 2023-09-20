@@ -8,3 +8,4 @@ all:
 clean:
 	make -C /lib/modules/6.2.0-32-generic/build M=$(PWD) clean
 	rm q2
+	rm data.txt
