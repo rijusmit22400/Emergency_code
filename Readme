@@ -1,0 +1,21 @@
+q2 ----------------------------------------------------------------
+
+Planet (optional) - Hello there
+TA - General Kenobi
+
+In this part we aim to launch 3 processes simultaneously, They are the same executables counting upto 2^32. But with different scheduling policies. Then we map these results on a histogram using matplotlib.
+
+We have taken a basic approach with the histograms and the process launching using a for loop to fork a child process 3 times and applying the scheduling policies as soon as the flow returns back to its parent.
+
+We have done some conditioning as well, as we understand that default processes have a niceness of 0 and default scheduling policy of others. That is why we do not explicitly invoke the policy like other processes.
+
+As soon as the program terminates we record our data in a text file which is later used by our python program to create the histogram.
+
+q3 -----------------------------------------------------------------
+
+Planet (optional) - Hello there
+TA - Ahh shit here we go again
+
+In this part we aim to create a system call whithin the module when the module is loaded the syshtam call is called with that counts all the running processes. An yes the makefile works and that's the most of it.
+
+This is a very basic progam that only has one additional additonal function except for the entry and exit fucntions. 

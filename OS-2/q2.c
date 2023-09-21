@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <sys/resource.h>
-
+#include <string.h>
 
 typedef struct time_record {
     struct timespec start;
@@ -13,6 +13,12 @@ typedef struct time_record {
 }time_record;
 
 int main() {
+    char cwd[1024]; 
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        strcat(cwd, "/e2");
+    } else {
+        perror("getcwd");
+    }
     FILE *generator;
     pid_t ids[3];
     time_record time [3];
@@ -33,19 +39,21 @@ int main() {
             struct sched_param param;
             param.sched_priority=priority[i];
             printf("The child process %d is about to run\n",i+1);
-            if(i==0){
+            if(i!=0){
+                if(sched_setscheduler(0,scheduling[i],&param)==-1){
+                    perror("KILLING THE CHILD NOW");
+                
+                }else{
+                    execl(cwd,cwd,NULL);
+                }
+            }
+            else{
                 if(setpriority(PRIO_PROCESS,0,0)==-1){
                     perror("cannot set priority");
                     continue;
                 }
-                execl("/home/rijusmit-biswas/Desktop/OS-2/e2","/home/rijusmit-biswas/Desktop/OS-2/e2",NULL);
+                execl(cwd,cwd,NULL);
                 continue;
-            }
-            if(sched_setscheduler(0,scheduling[i],&param)==-1){
-                perror("KILLING THE CHILD NOW");
-                
-            }else{
-                execl("/home/rijusmit-biswas/Desktop/OS-2/e2","/home/rijusmit-biswas/Desktop/OS-2/e2",NULL);
             }
             exit(EXIT_SUCCESS);
 
@@ -54,6 +62,10 @@ int main() {
         }
     }
     generator = fopen("data.txt","w"); 
+    if(generator==NULL){
+        perror("fopen");
+        
+    }
     for (int i=0;i<num_children;i++){
         waitpid(ids[i],EXIT_SUCCESS,0);
         clock_gettime(1,&(time[i].final));
